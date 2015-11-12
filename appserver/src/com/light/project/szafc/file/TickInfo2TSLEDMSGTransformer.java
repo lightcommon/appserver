@@ -17,6 +17,7 @@ import com.light.project.szafc.common.BusiTools;
 import com.light.project.szafc.common.entity.file.TSJTSale;
 import com.light.project.szafc.common.entity.file.TSLESJTUD;
 import com.light.project.szafc.common.entity.file.TSLEUDMSG;
+import com.light.project.szafc.common.entity.file.TSZAFCTime64;
 import com.light.project.szafc.common.entity.file.TTicketComm;
 import com.light.project.szafc.common.entity.file.TUDComm;
 
@@ -107,7 +108,16 @@ public class TickInfo2TSLEDMSGTransformer extends AbstractDefaultTransformer<Tic
 		
 		dst.getUDComm().setTransactionType(new TU8((byte)1));
 		
+		
+		
 		dst.getUDComm().setTransactionDateTime(BusiTools.getDateGMT(src.getTickEffTime(),"yyyy-MM-dd HH-mm-ss"));
+		int gmtOffset = 0;
+		/*test only*/
+		gmtOffset =  8 * 3600;
+		TSZAFCTime64 time = dst.getUDComm().getTransactionDateTime();
+		time.setTime_LO(new TU32(time.getTime_LO().getValue() + gmtOffset));
+		/**/
+		
 		
 //		dst.getUDComm().setTACSAMID(new TU32(Integer.valueOf(src.getSAMId(),16)));
 		dst.getUDComm().setTACSAMID(new TU32((Integer)BusiTools.getNumFromStr(src.getSAMId(), 16, "int")));
